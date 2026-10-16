@@ -1,0 +1,55 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libx11-dev libxext-dev libxinerama-dev libxrandr-dev \
+            libxcursor-dev libxcomposite-dev libfreetype-dev libfontconfig1-dev libgl1-mesa-dev xvfb
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test (Windows / macOS)
+        if: runner.os != 'Linux'
+        shell: bash
+        run: |
+          exe=$(find build -type f \( -name "VoiceFrameProTests" -o -name "VoiceFrameProTests.exe" \) | head -n 1)
+          "$exe" snapshots
+
+      - name: Test (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          exe=$(find build -type f -name "VoiceFrameProTests" | head -n 1)
+          xvfb-run -a "$exe" snapshots
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: VoiceFramePro-VST3-${{ runner.os }}
+          path: build/**/VST3/*.vst3
+
+      - name: Upload editor snapshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: editor-snapshots-${{ runner.os }}
+          path: snapshots/*.png

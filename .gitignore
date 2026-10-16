@@ -1,0 +1,18 @@
+# Build output
+build/
+out/
+cmake-build-*/
+
+# Local JUCE checkout (CMake fetches JUCE 7.0.12 when this folder is absent)
+juce/
+
+# Local backup of the previous vocal-processor sources
+_legacy_vocal_processor/
+
+# Editors / OS
+.vs/
+.vscode/
+.idea/
+*.user
+.DS_Store
+Thumbs.db

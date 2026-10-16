@@ -1,0 +1,5 @@
+RNNoise v0.1.1 (commit 6cbfd53) from https://github.com/xiph/rnnoise — BSD-3-Clause, see COPYING.
+
+Local modification: added rnnoise_process_frame_linked() to src/denoise.c and include/rnnoise.h
+(stereo-linked gain). No other changes.
+Also: src/common.h gained M_PI + RNN_VLA (MSVC has no C99 VLAs); VLAs in celt_lpc.c / pitch.c use it.
