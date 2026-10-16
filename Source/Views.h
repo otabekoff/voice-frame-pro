@@ -128,6 +128,7 @@ namespace vfp::ui
     {
     public:
         PresetMenu(EditorContext &ctx, bool compact, std::function<void()> onClose);
+        ~PresetMenu() override;
 
         int getPreferredHeight() const;
         void paint(juce::Graphics &) override;

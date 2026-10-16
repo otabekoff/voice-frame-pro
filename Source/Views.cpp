@@ -1808,6 +1808,8 @@ namespace vfp::ui
         setWantsKeyboardFocus(true);
     }
 
+    PresetMenu::~PresetMenu() = default;
+
     int PresetMenu::getPreferredHeight() const
     {
         // 16 px shadow margin each side + 6 px padding
