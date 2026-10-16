@@ -92,6 +92,8 @@ target_compile_definitions(VoiceFramePro
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
         JUCE_DISPLAY_SPLASH_SCREEN=0
+        # JUCE 7.0.12 SIMDRegister does not compile with recent Apple Clang on arm64; nothing here needs it
+        $<$<PLATFORM_ID:Darwin>:JUCE_USE_SIMD=0>
 )
 
 target_link_libraries(VoiceFramePro
@@ -132,6 +134,7 @@ if(VFP_BUILD_TESTS)
             JUCE_USE_CURL=0
             JUCE_MODAL_LOOPS_PERMITTED=1
             JUCE_DISPLAY_SPLASH_SCREEN=0
+            $<$<PLATFORM_ID:Darwin>:JUCE_USE_SIMD=0>
             JucePlugin_Name="VoiceFrame Pro"
             JucePlugin_VersionString="${PROJECT_VERSION}"
     )
